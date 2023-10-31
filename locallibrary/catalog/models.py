@@ -39,6 +39,7 @@ class BookInstance(models.Model):
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='m', help_text='Book availability')
     class Meta:
         ordering = ["due_back"]
+        permissions = (("can_mark_returned", "Set book as returned"),)
     def __str__(self):
         return '%s (%s)' % (self.id,self.book.title)
     @property
