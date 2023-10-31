@@ -1,5 +1,6 @@
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
@@ -7,10 +8,9 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import datetime
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms import ModelForm
-from .models import BookInstance
 
 
 class MyView(LoginRequiredMixin):
@@ -141,3 +141,17 @@ class RenewBookModelForm(ModelForm):
         fields = ['due_back',]
         labels = {'due_back': _('Renewal date'), }
         help_texts = {'due_back': _('Enter a date between now and 4 weeks (default 3).'), }
+
+class AuthorCreate(CreateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    initial = {'date_of_death': '11/06/2020'}
+
+class AuthorUpdate(UpdateView):
+    model = Author
+    fields = '__all__'
+
+class AuthorDelete(DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors')
+
